@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
+
+    <LinearLayout
+        android:id="@+id/inbox"
+        style="@style/DrawerRow">
+
+        <ImageView
+            android:id="@+id/inboxIcon"
+            style="@style/DrawerIcon"
+            android:src="@drawable/ic_inbox_black"
+            tools:tint="@color/tools_theme" />
+
+        <linear.sms.widget.NormalTextView
+            style="@style/DrawerText"
+            android:text="收件箱" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/archived"
+        style="@style/DrawerRow"
+        android:layout_marginBottom="8dp">
+
+        <ImageView
+            android:id="@+id/archivedIcon"
+            style="@style/DrawerIcon"
+            android:src="@drawable/ic_archive_black"
+            tools:tint="@color/textSecondary" />
+
+        <linear.sms.widget.NormalTextView
+            style="@style/DrawerText"
+            android:text="垃圾短信" />
+
+    </LinearLayout>
+
+    <TextView style="@style/divider" />
+
+    <linear.sms.widget.NormalTextView
+        style="@style/TextSecondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="更多" />
+
+    <LinearLayout
+        android:id="@+id/settings"
+        style="@style/DrawerRow">
+
+        <ImageView
+            android:id="@+id/settingsIcon"
+            style="@style/DrawerIcon"
+            android:src="@drawable/ic_settings_black"
+            tools:tint="@color/textSecondary" />
+
+        <linear.sms.widget.NormalTextView
+            style="@style/DrawerText"
+            android:text="设置" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/help"
+        style="@style/DrawerRow">
+
+        <ImageView
+            android:id="@+id/helpIcon"
+            style="@style/DrawerIcon"
+            android:src="@drawable/ic_help_black"
+            tools:tint="@color/textSecondary" />
+
+        <linear.sms.widget.NormalTextView
+            style="@style/DrawerText"
+            android:text="帮助及反馈" />
+
+    </LinearLayout>
+
+</LinearLayout>
