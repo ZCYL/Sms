@@ -91,14 +91,15 @@ public class PriorProbability {
     private double getProbality(String content, List<String> keyList) {
         List<SegToken> targetVec = ChineseSpliter.splitWord(content);
         double p = 1;
-        for (String s : keyList) {
+        for (SegToken segToken:targetVec) {
             long sum = 0;
-            for (int i = 0; i < targetVec.size(); i++) {
-                if (targetVec.get(i).word.equals(s)) {
+            String t = segToken.word;
+            for (String word : keyList){
+                if (word.equals(t)){
                     sum++;
                 }
             }
-            p *= (sum + 1) / (double) (keyList.size() + targetVec.size());
+            p *= (sum + 1) / (double)(targetVec.size() + targetVec.size());
         }
 
         return p;
