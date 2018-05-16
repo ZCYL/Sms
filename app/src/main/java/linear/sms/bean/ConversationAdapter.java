@@ -1,6 +1,6 @@
 package linear.sms.bean;
 
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +15,10 @@ import linear.sms.util.DateFormatter;
  */
 public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewHolder, Conversation> {
 
-    private final SharedPreferences mPrefs;
+    private Conversation[] mConversationArray;
 
     public ConversationAdapter(BaseActivity context) {
         super(context);
-        mPrefs = context.getPrefs();
     }
 
     @NonNull
@@ -32,13 +31,6 @@ public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewH
         holder.mutedView.setImageResource(R.drawable.ic_notifications_muted);
         holder.unreadView.setImageResource(R.drawable.ic_unread_indicator);
         holder.errorIndicator.setImageResource(R.drawable.ic_error);
-
-//        LiveViewManager.registerView(QKPreference.THEME, this, key -> {
-//            holder.mutedView.setColorFilter(ThemeManager.getColor());
-//            holder.unreadView.setColorFilter(ThemeManager.getColor());
-//            holder.errorIndicator.setColorFilter(ThemeManager.getColor());
-//        });
-
         return holder;
     }
 
@@ -77,21 +69,7 @@ public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewH
 //            holder.dateView.setTextColor(hasUnreadMessages ? ThemeManager.getColor() : ThemeManager.getTextOnBackgroundSecondary());
 //        });
 
-        if (isInMultiSelectMode()) {
-            holder.mSelected.setVisibility(View.VISIBLE);
-            if (isSelected(conversation.getThreadId())) {
-                holder.mSelected.setImageResource(R.drawable.ic_selected);
-//                holder.mSelected.setColorFilter(ThemeManager.getColor());
-                holder.mSelected.setAlpha(1f);
-            } else {
-                holder.mSelected.setImageResource(R.drawable.ic_unselected);
-//                holder.mSelected.setColorFilter(ThemeManager.getTextOnBackgroundSecondary());
-                holder.mSelected.setAlpha(0.5f);
-            }
-        } else {
-            holder.mSelected.setVisibility(View.GONE);
-        }
-
+        holder.mSelected.setVisibility(View.GONE);
 //        LiveViewManager.registerView(QKPreference.HIDE_AVATAR_CONVERSATIONS, this, key ->
 //                holder.mAvatarView.setVisibility(mContext.getBoolean(QKPreference.HIDE_AVATAR_CONVERSATIONS) ? View.GONE : View.VISIBLE));
 
@@ -115,7 +93,20 @@ public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewH
     }
 
     protected Conversation getItem(int position) {
-        mCursor.moveToPosition(position);
-        return Conversation.from(mContext, mCursor);
+        Conversation conversation = null;
+        if (mConversationArray != null) {
+            conversation = mConversationArray[position];
+        }
+        if (conversation == null) {
+            mCursor.moveToPosition(position);
+            conversation = Conversation.from(mContext, mCursor);
+            mConversationArray[position] = conversation;
+        }
+        return conversation;
+    }
+
+    @Override
+    protected void onCursorChange(Cursor cursor) {
+        mConversationArray = new Conversation[cursor.getCount()];
     }
 }

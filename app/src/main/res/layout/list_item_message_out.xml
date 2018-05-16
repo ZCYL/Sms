@@ -38,51 +38,24 @@
                 android:id="@+id/message_block"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="44dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="44dp"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:gravity="right"
+                android:gravity="end"
+                android:layout_marginStart="10dp"
                 android:orientation="vertical">
+
 
                 <linear.sms.widget.NormalTextView
                     android:id="@+id/text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:autoLink="all"
-                    android:background="@drawable/message_sent_2"
+                    android:background="@drawable/message_sent_alt_2"
                     android:gravity="center_vertical"
                     android:linksClickable="true"
                    />
-
-                <FrameLayout
-                    android:id="@+id/mms_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="8dp"
-                    android:foreground="@drawable/card_mask">
-
-                    <ImageView
-                        android:id="@+id/image_view"
-                        android:layout_width="24dp"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
-                        android:visibility="visible" />
-
-                    <ImageButton
-                        android:id="@+id/play_slideshow_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/button_background_transparent"
-                        android:padding="16dp"
-                        android:src="@drawable/ic_play"
-                        android:visibility="gone" />
-
-                </FrameLayout>
 
             </LinearLayout>
 

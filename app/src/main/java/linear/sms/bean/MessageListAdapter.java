@@ -118,7 +118,7 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
 //            holder.mLockedIndicator.setColorFilter(ThemeManager.getTextOnBackgroundSecondary(), PorterDuff.Mode.SRC_ATOP);
 
             // set up avatar
-//            holder.mAvatarView.setImageDrawable(Contact.getMe(true).getAvatar(mContext, null));
+            holder.mAvatarView.setImageDrawable(mContext.getDrawable(R.drawable.ic_person_black_24dp));
 //            holder.mAvatarView.setContactName(AvatarView.ME);
 //            holder.mAvatarView.assignContactUri(ContactsContract.Profile.CONTENT_URI);
             if (mPrefs.getBoolean(SettingsFragment.HIDE_AVATAR_SENT, true)) {
@@ -133,10 +133,8 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
 //            holder.mLockedIndicator.setColorFilter(ThemeManager.getTextOnBackgroundSecondary(), PorterDuff.Mode.SRC_ATOP);
 
             // set up avatar
-            if (mPrefs.getBoolean(SettingsFragment.HIDE_AVATAR_RECEIVED, false)) {
-                ((RelativeLayout.LayoutParams) holder.mMessageBlock.getLayoutParams()).setMargins(0, 0, 0, 0);
-                holder.mAvatarView.setVisibility(View.GONE);
-            }
+            holder.mAvatarView.setImageDrawable(mContext.getDrawable(R.drawable.ic_person_black_24dp));
+
         }
 
 //        LiveViewManager.registerView(QKPreference.BACKGROUND, this, key -> {
@@ -188,65 +186,7 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
 //        }
     }
 
-    /**
-     * Binds a MessageItem that hasn't been downloaded yet
-     */
-    private void bindNotifInd(final MessageListViewHolder holder, final MessageItem messageItem) {
-        holder.showMmsView(false);
-//
-//        switch (messageItem.getMmsDownloadStatus()) {
-//            case DownloadManager.STATE_PRE_DOWNLOADING:
-//            case DownloadManager.STATE_DOWNLOADING:
-//                showDownloadingAttachment(holder);
-//                break;
-//            case DownloadManager.STATE_UNKNOWN:
-//            case DownloadManager.STATE_UNSTARTED:
-//                DownloadManager downloadManager = DownloadManager.getInstance();
-//                boolean autoDownload = downloadManager.isAuto();
-//                boolean dataSuspended = (QKSMSApp.getApplication().getTelephonyManager()
-//                        .getDataState() == TelephonyManager.DATA_SUSPENDED);
-//
-//                // If we're going to automatically start downloading the mms attachment, then
-//                // don't bother showing the download button for an instant before the actual
-//                // download begins. Instead, show downloading as taking place.
-//                if (autoDownload && !dataSuspended) {
-//                    showDownloadingAttachment(holder);
-//                    break;
-//                }
-//            case DownloadManager.STATE_TRANSIENT_FAILURE:
-//            case DownloadManager.STATE_PERMANENT_FAILURE:
-//            case DownloadManager.STATE_SKIP_RETRYING:
-//            default:
-//                holder.inflateDownloadControls();
-//                holder.mDownloadingLabel.setVisibility(View.GONE);
-//                holder.mDownloadButton.setVisibility(View.VISIBLE);
-//                holder.mDownloadButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        holder.mDownloadingLabel.setVisibility(View.VISIBLE);
-//                        holder.mDownloadButton.setVisibility(View.GONE);
-//                        Intent intent = new Intent(mContext, TransactionService.class);
-//                        intent.putExtra(TransactionBundle.URI, messageItem.mMessageUri.toString());
-//                        intent.putExtra(TransactionBundle.TRANSACTION_TYPE, Transaction.RETRIEVE_TRANSACTION);
-//                        mContext.startService(intent);
-//
-//                        DownloadManager.getInstance().markState(messageItem.mMessageUri, DownloadManager.STATE_PRE_DOWNLOADING);
-//                    }
-//                });
-//                break;
-//        }
 
-        // Hide the indicators.
-        holder.mLockedIndicator.setVisibility(View.GONE);
-        holder.mDeliveredIndicator.setVisibility(View.GONE);
-        holder.mDetailsIndicator.setVisibility(View.GONE);
-    }
-
-    private void showDownloadingAttachment(MessageListViewHolder holder) {
-        holder.inflateDownloadControls();
-        holder.mDownloadingLabel.setVisibility(View.VISIBLE);
-        holder.mDownloadButton.setVisibility(View.GONE);
-    }
 
     private boolean shouldShowTimestamp(MessageItem messageItem, int position) {
         if (position == mCursor.getCount() - 1) {
@@ -432,7 +372,7 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
 
     private void bindMmsView(final MessageListViewHolder holder, MessageItem messageItem) {
         if (messageItem.isSms()) {
-            holder.showMmsView(false);
+//            holder.showMmsView(false);
 //            messageItem.setOnPduLoaded(null);
         } else {
             if (messageItem.mAttachmentType != SmsHelper.TEXT) {
@@ -442,7 +382,7 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
                 setImageViewOnClickListener(holder, messageItem);
                 drawPlaybackButton(holder, messageItem);
             } else {
-                holder.showMmsView(false);
+//                holder.showMmsView(false);
             }
 
 //            if (messageItem.mSlideshow == null) {

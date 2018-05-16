@@ -47,6 +47,7 @@ public abstract class RecyclerCursorAdapter<VH extends RecyclerView.ViewHolder, 
     }
 
     public void changeCursor(Cursor cursor) {
+        onCursorChange(cursor);
         Cursor old = swapCursor(cursor);
         if (old != null) {
             old.close();
@@ -65,6 +66,8 @@ public abstract class RecyclerCursorAdapter<VH extends RecyclerView.ViewHolder, 
         }
         return oldCursor;
     }
+
+    protected void onCursorChange(Cursor cursor){}
 
     public Cursor getCursor() {
         return mCursor;

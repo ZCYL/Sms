@@ -1,17 +1,14 @@
 package linear.sms.ui.act;
 
-import android.Manifest;
 import android.app.LoaderManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -43,11 +40,6 @@ public class MessageListActivity extends BaseActivity implements LoaderManager.L
     public static final String ARG_SHOW_IMMEDIATE = "showImmediate";
 
     private long mThreadId;
-    private long mRowId;
-    private String mHighlight;
-    private boolean mShowImmediate;
-
-    private long mWaitingForThreadId = -1;
 
     private MessageListAdapter mAdapter;
     @BindView(R.id.recycle_message_list)
@@ -85,13 +77,6 @@ public class MessageListActivity extends BaseActivity implements LoaderManager.L
 
     private void init(Intent intent) {
         mThreadId = intent.getLongExtra(ARG_THREAD_ID, -1);
-        mRowId = intent.getLongExtra(ARG_ROW_ID, -1);
-        mHighlight = intent.getStringExtra(ARG_HIGHLIGHT);
-        mShowImmediate = intent.getBooleanExtra(ARG_SHOW_IMMEDIATE, false);
-    }
-
-    public void getResultForThreadId(long threadId) {
-        mWaitingForThreadId = threadId;
     }
 
     @Override
@@ -115,18 +100,10 @@ public class MessageListActivity extends BaseActivity implements LoaderManager.L
     }
 
     private void makeCall() {
-        Intent openDialerIntent = new Intent(Intent.ACTION_CALL);
-//        openDialerIntent.setData(Uri.parse("tel:" + mConversationLegacy.getAddress()));
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
+        Intent openDialerIntent = new Intent(Intent.ACTION_DIAL);
+        Uri data = Uri.parse("tel:" + SmsHelper.getContactAddress(this,mThreadId));
+        openDialerIntent.setData(data);
+        startActivity(openDialerIntent);
         startActivity(openDialerIntent);
     }
 
@@ -142,7 +119,7 @@ public class MessageListActivity extends BaseActivity implements LoaderManager.L
         if (mAdapter != null) {
             // Swap the new cursor in.  (The framework will take care of closing the, old cursor once we return.)
             mAdapter.changeCursor(data);
-            mRecyclerView.smoothScrollToPosition(data.getCount());
+            mRecyclerView.scrollToPosition(data.getCount()-1);
         }
     }
 

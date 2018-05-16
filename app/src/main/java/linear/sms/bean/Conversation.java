@@ -289,9 +289,6 @@ public class Conversation {
      * were not in cache.
      */
     public static Conversation from(Context context, Cursor cursor) {
-        // First look in the cache for the Conversation and return that one. That way, all the
-        // people that are looking at the cached copy will get updated when fillFromCursor() is
-        // called with this cursor.
         long threadId = cursor.getLong(ID);
         if (threadId > 0) {
             Conversation conv = Cache.get(threadId);

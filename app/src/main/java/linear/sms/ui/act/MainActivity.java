@@ -30,8 +30,8 @@ import linear.sms.ui.base.BaseActivity;
 import linear.sms.util.BlockedConversationHelper;
 import linear.sms.util.SmsHelper;
 
-public class MainActivity extends BaseActivity implements  LoaderManager.LoaderCallbacks<Cursor>,
-        RecyclerCursorAdapter.ItemClickListener<Conversation>, RecyclerCursorAdapter.MultiSelectListener{
+public class MainActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+        RecyclerCursorAdapter.ItemClickListener<Conversation>, RecyclerCursorAdapter.MultiSelectListener {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
@@ -47,7 +47,6 @@ public class MainActivity extends BaseActivity implements  LoaderManager.LoaderC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        getLoaderManager().initLoader(0,savedInstanceState,this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -55,10 +54,11 @@ public class MainActivity extends BaseActivity implements  LoaderManager.LoaderC
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
         initList();
+        getLoaderManager().initLoader(0, savedInstanceState, MainActivity.this);
     }
 
-    private void initList(){
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this );
+    private void initList() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         mAdapter = new ConversationAdapter(this);
         mAdapter.setItemClickListener(this);
@@ -85,14 +85,14 @@ public class MainActivity extends BaseActivity implements  LoaderManager.LoaderC
     }
 
     @OnClick(R.id.settings)
-    public void onSettingClick(){
+    public void onSettingClick() {
         mDrawer.closeDrawer(GravityCompat.START);
         AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(mContext,SettingActivity.class));
+                startActivity(new Intent(mContext, SettingActivity.class));
             }
-        },200, TimeUnit.MILLISECONDS);
+        }, 200, TimeUnit.MILLISECONDS);
     }
 
     @Override

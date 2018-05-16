@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import linear.sms.R;
+import linear.sms.bean.Conversation;
 import linear.sms.ui.base.BaseActivity;
 import linear.sms.util.PermissionUtils;
 
@@ -23,7 +24,8 @@ public class GuideActivity extends BaseActivity {
 
     //第一次打开应用需要申请的权限
     private final String[] PERMISSIONS = new String[]
-            {Manifest.permission.READ_SMS, Manifest.permission.SEND_SMS};
+            {Manifest.permission.READ_SMS, Manifest.permission.SEND_SMS,
+            Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS};
 
     // 多个权限请求Code
     private final int REQUEST_CODE_PERMISSIONS = 2;
@@ -38,8 +40,7 @@ public class GuideActivity extends BaseActivity {
                 AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
-                        GuideActivity.this.startActivity(new Intent(GuideActivity.this, MainActivity.class));
-                        GuideActivity.this.finish();
+                        goToMain();
                     }
                 });
             }
@@ -71,8 +72,7 @@ public class GuideActivity extends BaseActivity {
                         AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
                             @Override
                             public void run() {
-                                GuideActivity.this.startActivity(new Intent(GuideActivity.this, MainActivity.class));
-                                GuideActivity.this.finish();
+                              goToMain();
                             }
                         });
                     }
@@ -118,5 +118,12 @@ public class GuideActivity extends BaseActivity {
                 .setMessage("我们需要" + Arrays.toString(permission) + "权限")
                 .setPositiveButton("确定", onClickListener)
                 .show();
+    }
+
+    private void goToMain(){
+        GuideActivity.this.startActivity(new Intent(GuideActivity.this, MainActivity.class));
+        GuideActivity.this.finish();
+        Conversation.init(this);
+
     }
 }

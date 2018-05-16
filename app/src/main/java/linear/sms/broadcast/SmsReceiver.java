@@ -8,6 +8,8 @@ import android.telephony.SmsMessage;
 
 import java.util.Objects;
 
+import linear.sms.bayes.PriorProbability;
+
 /**
  * Created by ZCYL on 2018/5/10.
  */
@@ -16,15 +18,20 @@ public class SmsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (Objects.equals(intent.getAction(), "android.provider.Telephony.SMS_RECEIVED")) {
             Bundle bundle = intent.getExtras();
+            Object pdus[] = (Object[]) bundle.get("pdus");
+            if (pdus == null) return;
+            for (Object pdu : pdus) {
+                SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdu);
+                String address = smsMessage.getOriginatingAddress();
+                String content = smsMessage.getMessageBody();
+                PriorProbability.instance.isHarmMessage(content, new PriorProbability.OnBayesAnalyseFinishListener() {
+                    @Override
+                    public void onFinish(Boolean isHarmMessage) {
 
-            Object messages[] = (Object[]) bundle.get("pdus");
-            SmsMessage smsMessage[] = new SmsMessage[messages.length];
-            for (int n = 0; n < messages.length; n++) {
-                smsMessage[n] = SmsMessage.createFromPdu((byte[]) messages[n]);
+                    }
+                });
+                abortBroadcast();
             }
-
-            String address = smsMessage[0].getOriginatingAddress();
-//            showToast(context, "短信内容: " + smsMessage[0].getMessageBody());
         }
     }
 }

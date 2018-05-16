@@ -2,7 +2,7 @@ package linear.sms.ui.base;
 
 import android.app.Application;
 
-import linear.sms.bean.Conversation;
+import linear.sms.bayes.PriorProbability;
 
 /**
  * Created by ZCYL on 2018/4/11.
@@ -15,6 +15,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        Conversation.init(this);
+        PriorProbability.instance.init(this);
     }
 }
