@@ -29,7 +29,7 @@
     <LinearLayout
         android:id="@+id/archived"
         style="@style/DrawerRow"
-        android:layout_marginBottom="8dp">
+       >
 
         <ImageView
             android:id="@+id/archivedIcon"
@@ -40,6 +40,23 @@
         <linear.sms.widget.NormalTextView
             style="@style/DrawerText"
             android:text="垃圾短信" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/black_list"
+        style="@style/DrawerRow"
+        android:layout_marginBottom="8dp">
+
+        <ImageView
+            android:id="@+id/helpIcon"
+            style="@style/DrawerIcon"
+            android:src="@drawable/ic_black_person"
+            tools:tint="@color/textSecondary" />
+
+        <linear.sms.widget.NormalTextView
+            style="@style/DrawerText"
+            android:text="黑名单" />
 
     </LinearLayout>
 
@@ -68,20 +85,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/help"
-        style="@style/DrawerRow">
 
-        <ImageView
-            android:id="@+id/helpIcon"
-            style="@style/DrawerIcon"
-            android:src="@drawable/ic_help_black"
-            tools:tint="@color/textSecondary" />
-
-        <linear.sms.widget.NormalTextView
-            style="@style/DrawerText"
-            android:text="帮助及反馈" />
-
-    </LinearLayout>
 
 </LinearLayout>

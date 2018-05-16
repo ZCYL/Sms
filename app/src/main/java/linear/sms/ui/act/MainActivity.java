@@ -98,7 +98,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     }
 
-    @OnClick(R.id.help)
+    @OnClick(R.id.black_list)
     public void onInfoClick(View view){
 
     }
