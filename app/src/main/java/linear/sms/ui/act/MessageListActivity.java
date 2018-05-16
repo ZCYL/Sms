@@ -13,16 +13,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import linear.sms.R;
 import linear.sms.bean.Message;
 import linear.sms.bean.MessageItem;
@@ -31,7 +34,7 @@ import linear.sms.bean.RecyclerCursorAdapter;
 import linear.sms.ui.base.BaseActivity;
 import linear.sms.util.SmsHelper;
 
-public class MessageListActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,RecyclerCursorAdapter.ItemClickListener<MessageItem>,RecyclerCursorAdapter.MultiSelectListener {
+public class MessageListActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, RecyclerCursorAdapter.ItemClickListener<MessageItem>, RecyclerCursorAdapter.MultiSelectListener {
     private final String TAG = "MessageListActivity";
 
     public static final String ARG_THREAD_ID = "thread_id";
@@ -44,6 +47,12 @@ public class MessageListActivity extends BaseActivity implements LoaderManager.L
     private MessageListAdapter mAdapter;
     @BindView(R.id.recycle_message_list)
     RecyclerView mRecyclerView;
+    @BindView(R.id.text_message_send)
+    EditText mEditMessageSend;
+    @BindView(R.id.toolbar_edit_text)
+    EditText mEditAddress;
+    @BindView(R.id.toolbar_title)
+    TextView mTextAddress;
 
     public static void launch(BaseActivity context, long threadId, long rowId, String pattern, boolean showImmediate) {
         Intent intent = new Intent(context, MessageListActivity.class);
@@ -64,19 +73,24 @@ public class MessageListActivity extends BaseActivity implements LoaderManager.L
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         init(getIntent());
-        getLoaderManager().initLoader(0, null, this);
         mAdapter = new MessageListAdapter(this);
         mAdapter.setItemClickListener(this);
         mAdapter.setMultiSelectListener(this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        TextView textView = findViewById(R.id.toolbar_title);
-        textView.setText(SmsHelper.getContactNameByThreadId(this,mThreadId));
+
     }
 
     private void init(Intent intent) {
         mThreadId = intent.getLongExtra(ARG_THREAD_ID, -1);
+        if (mThreadId != -1) {
+            getLoaderManager().initLoader(0, null, this);
+            mTextAddress.setText(SmsHelper.getContactNameByThreadId(this, mThreadId));
+        } else {
+            mTextAddress.setVisibility(View.GONE);
+            mEditAddress.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -100,8 +114,12 @@ public class MessageListActivity extends BaseActivity implements LoaderManager.L
     }
 
     private void makeCall() {
+        if (mThreadId == -1){
+            showToast("新建短信不能拨号！");
+            return;
+        }
         Intent openDialerIntent = new Intent(Intent.ACTION_DIAL);
-        Uri data = Uri.parse("tel:" + SmsHelper.getContactAddress(this,mThreadId));
+        Uri data = Uri.parse("tel:" + SmsHelper.getContactAddress(this, mThreadId));
         openDialerIntent.setData(data);
         startActivity(openDialerIntent);
         startActivity(openDialerIntent);
@@ -119,8 +137,27 @@ public class MessageListActivity extends BaseActivity implements LoaderManager.L
         if (mAdapter != null) {
             // Swap the new cursor in.  (The framework will take care of closing the, old cursor once we return.)
             mAdapter.changeCursor(data);
-            mRecyclerView.scrollToPosition(data.getCount()-1);
+            mRecyclerView.scrollToPosition(data.getCount() - 1);
         }
+    }
+
+    @OnClick(R.id.bn_message_send)
+    public void onMessageSendClick(View view) {
+        String text = mEditMessageSend.getText().toString();
+        if (TextUtils.isEmpty(text)) {
+            showToast("请先编辑短信");
+            mEditMessageSend.requestFocus();
+            return;
+        }
+        String address = mThreadId == -1 ? mEditAddress.getText().toString()
+                : SmsHelper.getContactAddress(this, mThreadId);
+        if (TextUtils.isEmpty(address)){
+            showToast("请输入收件人号码");
+            mEditAddress.requestFocus();
+            return;
+        }
+        mEditMessageSend.setText("");
+        sendMessage(this, text, address);
     }
 
     @Override

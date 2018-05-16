@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
-import android.os.Handler;
 import android.provider.Telephony;
 import android.provider.Telephony.TextBasedSmsColumns;
 import android.text.SpannableStringBuilder;
@@ -49,8 +48,6 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
     private long mRowId = -1;
     private Pattern mSearchHighlighter = null;
     private boolean mIsGroupConversation = false;
-    private Handler mMessageListItemHandler = null; // TODO this isn't quite the same as the others
-    private String mSelection = null;
 
     public MessageListAdapter(BaseActivity context) {
         super(context);

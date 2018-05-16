@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 /**
  * Created by ZCYL on 2018/4/11.
@@ -29,7 +30,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         return mPrefs;
     }
 
-    protected void showBackButton(boolean show) {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(show);
+    public void showToast(String string){
+        Toast.makeText(this,string,Toast.LENGTH_SHORT).show();
     }
+
+
 }

@@ -7,7 +7,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -80,8 +79,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @OnClick(R.id.fab)
     public void onWriteMessageClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        MessageListActivity.launch(this,-1,-1,null,true);
     }
 
     @OnClick(R.id.settings)
@@ -145,7 +143,6 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (mAdapter != null) {
-            // Swap the new cursor in.  (The framework will take care of closing the, old cursor once we return.)
             mAdapter.changeCursor(data);
         }
 
