@@ -95,6 +95,21 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         }, 200, TimeUnit.MILLISECONDS);
     }
 
+    @OnClick(R.id.archived)
+    public void onSpamClick(View view){
+
+    }
+
+    @OnClick(R.id.help)
+    public void onInfoClick(View view){
+
+    }
+
+    @OnClick(R.id.inbox)
+    public void onInboxClick(){
+        mDrawer.closeDrawer(GravityCompat.START);
+    }
+
     @Override
     public void onItemClick(Conversation object, View view) {
         MessageListActivity.launch(this, object.getThreadId(), -1, null, true);
