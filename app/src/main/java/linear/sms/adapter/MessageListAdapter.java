@@ -1,4 +1,4 @@
-package linear.sms.bean;
+package linear.sms.adapter;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -19,6 +19,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import linear.sms.R;
+import linear.sms.bean.ColumnsMap;
+import linear.sms.bean.MessageItem;
 import linear.sms.ui.base.BaseActivity;
 import linear.sms.ui.frag.SettingsFragment;
 import linear.sms.util.CursorUtils;

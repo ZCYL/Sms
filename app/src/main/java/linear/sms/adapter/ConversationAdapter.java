@@ -1,4 +1,4 @@
-package linear.sms.bean;
+package linear.sms.adapter;
 
 import android.database.Cursor;
 import android.support.annotation.NonNull;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import linear.sms.R;
+import linear.sms.bean.Conversation;
 import linear.sms.ui.base.BaseActivity;
 import linear.sms.util.DateFormatter;
 
@@ -16,9 +17,18 @@ import linear.sms.util.DateFormatter;
 public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewHolder, Conversation> {
 
     private Conversation[] mConversationArray;
+    private boolean isHarm;
+    private static Conversation[] sSpamConversationArray;//用于存放垃圾短信
+    private int itemCount;
 
     public ConversationAdapter(BaseActivity context) {
+        this(context,false);
+    }
+
+    public ConversationAdapter(BaseActivity context, boolean isHarm) {
         super(context);
+        this.isHarm = isHarm;
+        sSpamConversationArray = new Conversation[0];
     }
 
     @NonNull
@@ -43,56 +53,31 @@ public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewH
         holder.mClickListener = mItemClickListener;
         holder.root.setOnClickListener(holder);
         holder.root.setOnLongClickListener(holder);
-
-//        holder.mutedView.setVisibility(new ConversationPrefsHelper(mContext, conversation.getThreadId())
-//                .getNotificationsEnabled() ? View.GONE : View.VISIBLE);
         holder.mutedView.setVisibility(View.GONE);
-
         holder.errorIndicator.setVisibility(View.GONE);
 
         final boolean hasUnreadMessages = conversation.hasUnreadMessages();
         if (hasUnreadMessages) {
             holder.unreadView.setVisibility(View.VISIBLE);
-//            holder.snippetView.setTextColor(ThemeManager.getTextOnBackgroundPrimary());
-//            holder.dateView.setTextColor(ThemeManager.getColor());
-//            holder.fromView.setType(FontManager.TEXT_TYPE_PRIMARY_BOLD);
             holder.snippetView.setMaxLines(5);
         } else {
             holder.unreadView.setVisibility(View.GONE);
-//            holder.snippetView.setTextColor(ThemeManager.getTextOnBackgroundSecondary());
-//            holder.dateView.setTextColor(ThemeManager.getTextOnBackgroundSecondary());
-//            holder.fromView.setType(FontManager.TEXT_TYPE_PRIMARY);
+
             holder.snippetView.setMaxLines(1);
         }
 
-//        LiveViewManager.registerView(QKPreference.THEME, this, key -> {
-//            holder.dateView.setTextColor(hasUnreadMessages ? ThemeManager.getColor() : ThemeManager.getTextOnBackgroundSecondary());
-//        });
-
         holder.mSelected.setVisibility(View.GONE);
-//        LiveViewManager.registerView(QKPreference.HIDE_AVATAR_CONVERSATIONS, this, key ->
-//                holder.mAvatarView.setVisibility(mContext.getBoolean(QKPreference.HIDE_AVATAR_CONVERSATIONS) ? View.GONE : View.VISIBLE));
-
-        // Date
         holder.dateView.setText(DateFormatter.getConversationTimestamp(mContext, conversation.getDate()));
-
         holder.mAvatarView.setVisibility(View.VISIBLE);
-        // Subject
         String emojiSnippet = conversation.getSnippet();
-//        if (mPrefs.getBoolean(SettingsFragment.AUTO_EMOJI, false)) {
-//            emojiSnippet = EmojiRegistry.parseEmojis(emojiSnippet);
-//        }
         holder.snippetView.setText(emojiSnippet);
-
         holder.fromView.setText(conversation.getContactName());
-
-//        Contact.addListener(holder);
-
-        // Update the avatar and name
-//        holder.onUpdate(conversation.getRecipients().size() == 1 ? conversation.getRecipients().get(0) : null);
     }
 
     protected Conversation getItem(int position) {
+        if (isHarm){
+            return sSpamConversationArray[position];
+        }
         Conversation conversation = null;
         if (mConversationArray != null) {
             conversation = mConversationArray[position];
@@ -108,5 +93,15 @@ public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewH
     @Override
     protected void onCursorChange(Cursor cursor) {
         mConversationArray = new Conversation[cursor.getCount()];
+        if (isHarm){
+            itemCount = sSpamConversationArray.length;
+        } else {
+            itemCount = cursor.getCount() - sSpamConversationArray.length;
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return itemCount;
     }
 }

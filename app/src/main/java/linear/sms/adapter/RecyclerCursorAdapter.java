@@ -1,4 +1,4 @@
-package linear.sms.bean;
+package linear.sms.adapter;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;

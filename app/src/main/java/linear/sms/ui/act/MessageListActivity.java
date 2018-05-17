@@ -29,8 +29,8 @@ import butterknife.OnClick;
 import linear.sms.R;
 import linear.sms.bean.Message;
 import linear.sms.bean.MessageItem;
-import linear.sms.bean.MessageListAdapter;
-import linear.sms.bean.RecyclerCursorAdapter;
+import linear.sms.adapter.MessageListAdapter;
+import linear.sms.adapter.RecyclerCursorAdapter;
 import linear.sms.ui.base.BaseActivity;
 import linear.sms.util.SmsHelper;
 

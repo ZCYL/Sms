@@ -1,10 +1,11 @@
-package linear.sms.bean;
+package linear.sms.adapter;
 
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.ImageView;
 
 import linear.sms.R;
+import linear.sms.bean.Conversation;
 import linear.sms.ui.base.BaseActivity;
 import linear.sms.widget.AvatarView;
 import linear.sms.widget.NormalTextView;

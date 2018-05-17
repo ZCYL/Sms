@@ -1,4 +1,4 @@
-package linear.sms.bean;
+package linear.sms.adapter;
 
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import linear.sms.R;
+import linear.sms.bean.MessageItem;
 import linear.sms.ui.base.BaseActivity;
 import linear.sms.widget.AvatarView;
 import linear.sms.widget.NormalTextView;

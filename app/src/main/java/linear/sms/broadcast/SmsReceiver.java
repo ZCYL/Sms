@@ -9,6 +9,7 @@ import android.telephony.SmsMessage;
 import java.util.Objects;
 
 import linear.sms.bayes.PriorProbability;
+import linear.sms.util.FileUtil;
 
 /**
  * Created by ZCYL on 2018/5/10.
@@ -24,6 +25,23 @@ public class SmsReceiver extends BroadcastReceiver {
                 SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdu);
                 String address = smsMessage.getOriginatingAddress();
                 String content = smsMessage.getMessageBody();
+
+                //先进行黑名单拦截
+                for (String s : FileUtil.readBlackContact()){
+                    if (s.equals(address)){
+                        //在黑名单列表中，直接拦截
+
+                        return;
+                    }
+                }
+
+                if (address.length() <= 5){
+                    //5位数以下的号码不拦截，可能是银行之类的号码
+
+                    return;
+                }
+
+
                 PriorProbability.instance.isHarmMessage(content, new PriorProbability.OnBayesAnalyseFinishListener() {
                     @Override
                     public void onFinish(Boolean isHarmMessage) {
