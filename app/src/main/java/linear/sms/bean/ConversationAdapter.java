@@ -46,9 +46,9 @@ public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewH
 
 //        holder.mutedView.setVisibility(new ConversationPrefsHelper(mContext, conversation.getThreadId())
 //                .getNotificationsEnabled() ? View.GONE : View.VISIBLE);
-        holder.mutedView.setVisibility(View.VISIBLE);
+        holder.mutedView.setVisibility(View.GONE);
 
-        holder.errorIndicator.setVisibility(conversation.hasError() ? View.VISIBLE : View.GONE);
+        holder.errorIndicator.setVisibility(View.GONE);
 
         final boolean hasUnreadMessages = conversation.hasUnreadMessages();
         if (hasUnreadMessages) {

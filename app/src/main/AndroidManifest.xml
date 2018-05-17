@@ -37,6 +37,8 @@
         </activity>
         <activity android:name=".ui.act.SettingActivity" />
         <activity android:name=".ui.act.MessageListActivity" />
+        <activity android:name=".ui.act.SpamActivity" />
+        <activity android:name=".ui.act.BlackListActivity" />
 
         <receiver android:name=".broadcast.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS">

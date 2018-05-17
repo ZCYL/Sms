@@ -95,12 +95,24 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @OnClick(R.id.archived)
     public void onSpamClick(View view){
-
+        mDrawer.closeDrawer(GravityCompat.START);
+        AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(mContext, SpamActivity.class));
+            }
+        }, 200, TimeUnit.MILLISECONDS);
     }
 
     @OnClick(R.id.black_list)
-    public void onInfoClick(View view){
-
+    public void onBlackListClick(View view){
+        mDrawer.closeDrawer(GravityCompat.START);
+        AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(mContext, BlackListActivity.class));
+            }
+        }, 200, TimeUnit.MILLISECONDS);
     }
 
     @OnClick(R.id.inbox)
