@@ -11,7 +11,6 @@ import java.util.Date;
 
 import linear.sms.R;
 import linear.sms.ui.base.MyApplication;
-import linear.sms.ui.frag.SettingsFragment;
 
 public abstract class DateFormatter {
 
@@ -49,7 +48,7 @@ public abstract class DateFormatter {
 
     public static SimpleDateFormat accountFor24HourTime(Context context, SimpleDateFormat input) { //pass in 12 hour time. If needed, change to 24 hr.
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean isUsing24HourTime = prefs.getBoolean(SettingsFragment.TIMESTAMPS_24H, DateFormat.is24HourFormat(context));
+        boolean isUsing24HourTime = prefs.getBoolean(SettingsPre.TIMESTAMPS_24H, DateFormat.is24HourFormat(context));
 
         if (isUsing24HourTime) {
             return new SimpleDateFormat(input.toPattern().replace('h', 'H').replaceAll(" a", ""));

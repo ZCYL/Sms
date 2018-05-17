@@ -22,7 +22,7 @@ import linear.sms.R;
 import linear.sms.bean.ColumnsMap;
 import linear.sms.bean.MessageItem;
 import linear.sms.ui.base.BaseActivity;
-import linear.sms.ui.frag.SettingsFragment;
+import linear.sms.util.SettingsPre;
 import linear.sms.util.CursorUtils;
 import linear.sms.util.MessageItemCache;
 import linear.sms.util.SmsHelper;
@@ -120,7 +120,7 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
             holder.mAvatarView.setImageDrawable(mContext.getDrawable(R.drawable.ic_person_black_24dp));
 //            holder.mAvatarView.setContactName(AvatarView.ME);
 //            holder.mAvatarView.assignContactUri(ContactsContract.Profile.CONTENT_URI);
-            if (mPrefs.getBoolean(SettingsFragment.HIDE_AVATAR_SENT, true)) {
+            if (mPrefs.getBoolean(SettingsPre.HIDE_AVATAR_SENT, true)) {
                 ((RelativeLayout.LayoutParams) holder.mMessageBlock.getLayoutParams()).setMargins(0, 0, 0, 0);
                 holder.mAvatarView.setVisibility(View.GONE);
             }
@@ -194,7 +194,7 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
 
         MessageItem messageItem2 = getItem(position + 1);
 
-        if(mPrefs.getBoolean(SettingsFragment.FORCE_TIMESTAMPS, false)) {
+        if(mPrefs.getBoolean(SettingsPre.FORCE_TIMESTAMPS, false)) {
             return true;
         } else if (messageItem.mDeliveryStatus != MessageItem.DeliveryStatus.NONE) {
             return true;
@@ -205,7 +205,7 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
         } else if (messagesFromDifferentPeople(messageItem, messageItem2)) {
             return true;
         } else {
-            int MAX_DURATION = Integer.parseInt(mPrefs.getString(SettingsFragment.SHOW_NEW_TIMESTAMP_DELAY, "5")) * 60 * 1000;
+            int MAX_DURATION = Integer.parseInt(mPrefs.getString(SettingsPre.SHOW_NEW_TIMESTAMP_DELAY, "5")) * 60 * 1000;
             return (messageItem2.mDate - messageItem.mDate >= MAX_DURATION);
         }
     }
@@ -263,9 +263,9 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
 //            }
 //        });
 
-        if (messageItem.isMe() && !mPrefs.getBoolean(SettingsFragment.HIDE_AVATAR_SENT, true)) {
+        if (messageItem.isMe() && !mPrefs.getBoolean(SettingsPre.HIDE_AVATAR_SENT, true)) {
             holder.mAvatarView.setVisibility(showAvatar ? View.VISIBLE : View.GONE);
-        } else if (!messageItem.isMe() && !mPrefs.getBoolean(SettingsFragment.HIDE_AVATAR_RECEIVED, false)) {
+        } else if (!messageItem.isMe() && !mPrefs.getBoolean(SettingsPre.HIDE_AVATAR_RECEIVED, false)) {
             holder.mAvatarView.setVisibility(showAvatar ? View.VISIBLE : View.GONE);
         }
     }
@@ -292,7 +292,7 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
 //        }
 
         if (!TextUtils.isEmpty(body)) {
-//            if (mPrefs.getBoolean(SettingsFragment.AUTO_EMOJI, false)) {
+//            if (mPrefs.getBoolean(SettingsPre.AUTO_EMOJI, false)) {
 //                body = EmojiRegistry.parseEmojis(body);
 //            }
 

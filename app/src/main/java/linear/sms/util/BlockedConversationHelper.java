@@ -13,7 +13,6 @@ import java.util.Observable;
 import java.util.Set;
 
 import linear.sms.bean.Conversation;
-import linear.sms.ui.frag.SettingsFragment;
 
 /**
  * A set of helper methods to group the logic related to blocked conversation
@@ -21,20 +20,20 @@ import linear.sms.ui.frag.SettingsFragment;
 public class BlockedConversationHelper {
 
     public static boolean isConversationBlocked(SharedPreferences prefs, long threadId) {
-        Set<String> idStrings = prefs.getStringSet(SettingsFragment.BLOCKED_SENDERS, new HashSet<String>());
+        Set<String> idStrings = prefs.getStringSet(SettingsPre.BLOCKED_SENDERS, new HashSet<String>());
         return idStrings.contains(String.valueOf(threadId));
     }
 
     public static void blockConversation(SharedPreferences prefs, long threadId) {
-        Set<String> idStrings = prefs.getStringSet(SettingsFragment.BLOCKED_SENDERS, new HashSet<String>());
+        Set<String> idStrings = prefs.getStringSet(SettingsPre.BLOCKED_SENDERS, new HashSet<String>());
         idStrings.add(String.valueOf(threadId));
-        prefs.edit().putStringSet(SettingsFragment.BLOCKED_SENDERS, idStrings).apply();
+        prefs.edit().putStringSet(SettingsPre.BLOCKED_SENDERS, idStrings).apply();
     }
 
     public static void unblockConversation(SharedPreferences prefs, long threadId) {
-        Set<String> idStrings = prefs.getStringSet(SettingsFragment.BLOCKED_SENDERS, new HashSet<String>());
+        Set<String> idStrings = prefs.getStringSet(SettingsPre.BLOCKED_SENDERS, new HashSet<String>());
         idStrings.remove(String.valueOf(threadId));
-        prefs.edit().putStringSet(SettingsFragment.BLOCKED_SENDERS, idStrings).apply();
+        prefs.edit().putStringSet(SettingsPre.BLOCKED_SENDERS, idStrings).apply();
     }
 
     public static Set<Long> getBlockedConversationIds(SharedPreferences prefs) {
@@ -47,23 +46,23 @@ public class BlockedConversationHelper {
     }
 
     public static Set<String> getBlockedConversations(SharedPreferences prefs) {
-        return prefs.getStringSet(SettingsFragment.BLOCKED_SENDERS, new HashSet<String>());
+        return prefs.getStringSet(SettingsPre.BLOCKED_SENDERS, new HashSet<String>());
     }
 
     public static void blockFutureConversation(SharedPreferences prefs, String address) {
-        Set<String> idStrings = prefs.getStringSet(SettingsFragment.BLOCKED_FUTURE, new HashSet<String>());
+        Set<String> idStrings = prefs.getStringSet(SettingsPre.BLOCKED_FUTURE, new HashSet<String>());
         idStrings.add(address);
-        prefs.edit().putStringSet(SettingsFragment.BLOCKED_FUTURE, idStrings).apply();
+        prefs.edit().putStringSet(SettingsPre.BLOCKED_FUTURE, idStrings).apply();
     }
 
     public static void unblockFutureConversation(SharedPreferences prefs, String address) {
-        Set<String> idStrings2 = prefs.getStringSet(SettingsFragment.BLOCKED_FUTURE, new HashSet<String>());
+        Set<String> idStrings2 = prefs.getStringSet(SettingsPre.BLOCKED_FUTURE, new HashSet<String>());
         idStrings2.remove(address);
-        prefs.edit().putStringSet(SettingsFragment.BLOCKED_FUTURE, idStrings2).apply();
+        prefs.edit().putStringSet(SettingsPre.BLOCKED_FUTURE, idStrings2).apply();
     }
 
     public static Set<String> getFutureBlockedConversations(SharedPreferences prefs) {
-        return prefs.getStringSet(SettingsFragment.BLOCKED_FUTURE, new HashSet<String>());
+        return prefs.getStringSet(SettingsPre.BLOCKED_FUTURE, new HashSet<String>());
     }
 
     public static boolean isFutureBlocked(SharedPreferences prefs, String address) {
@@ -131,7 +130,7 @@ public class BlockedConversationHelper {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mMenuItem.setVisible(mPrefs.getBoolean(SettingsFragment.BLOCKED_ENABLED, false));
+            mMenuItem.setVisible(mPrefs.getBoolean(SettingsPre.BLOCKED_ENABLED, false));
 //            mMenuItem.setTitle(mContext.getString(mShowBlocked ? R.string.menu_messages : R.string.menu_blocked));
         }
 

@@ -3,7 +3,6 @@ package linear.sms.ui.base;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -20,14 +19,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        getPrefs();
+        mPrefs = MyApplication.instance.getSharedPreferences();
     }
 
     public SharedPreferences getPrefs() {
-        if (mPrefs == null) {
-            mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        }
-        return mPrefs;
+        return MyApplication.instance.getSharedPreferences();
     }
 
     public void showToast(String string){

@@ -19,17 +19,17 @@ import linear.sms.R;
  */
 public class PreferenceView extends LinearLayout {
     public PreferenceView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public PreferenceView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
-        LayoutInflater.from(getContext()).inflate(R.layout.preference_view,this);
+        LayoutInflater.from(getContext()).inflate(R.layout.preference_view, this);
         setOrientation(HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs,R.styleable.PreferenceView);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PreferenceView);
 
         String title = typedArray.getString(R.styleable.PreferenceView_title);
         String summary = typedArray.getString(R.styleable.PreferenceView_summary);
@@ -39,20 +39,23 @@ public class PreferenceView extends LinearLayout {
         TextView textSummary = findViewById(R.id.summaryView);
         textSummary.setText(summary);
 
-        int widgetId =   typedArray.getResourceId(R.styleable.PreferenceView_widget, -1);
-        if (widgetId != -1){
+        int widgetId = typedArray.getResourceId(R.styleable.PreferenceView_widget, -1);
+        if (widgetId != -1) {
             ViewGroup v = findViewById(R.id.widgetFrame);
             View.inflate(context, widgetId, v);
         }
 
-       int iconId =  typedArray.getResourceId(R.styleable.PreferenceView_icon, -1);
-        if (iconId != -1){
+        int iconId = typedArray.getResourceId(R.styleable.PreferenceView_icon, -1);
+        if (iconId != -1) {
             ImageView i = findViewById(R.id.set_icon);
             i.setVisibility(VISIBLE);
             i.setImageResource(iconId);
         }
-
         typedArray.recycle();
+    }
+
+    public void setClickListener(View.OnClickListener listener) {
+        setOnClickListener(listener);
     }
 
 }

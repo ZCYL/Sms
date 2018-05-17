@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import linear.sms.bayes.PriorProbability;
 import linear.sms.util.FileUtil;
+import linear.sms.util.SettingsPre;
 
 /**
  * Created by ZCYL on 2018/5/10.
@@ -42,6 +43,10 @@ public class SmsReceiver extends BroadcastReceiver {
                 }
 
 
+                //用户未开启垃圾短信拦截
+                if (!SettingsPre.isBlockEnable()){
+                    return;
+                }
                 PriorProbability.instance.isHarmMessage(content, new PriorProbability.OnBayesAnalyseFinishListener() {
                     @Override
                     public void onFinish(Boolean isHarmMessage) {
