@@ -19,31 +19,31 @@ public class FileUtil {
     private static String BLACK_CONTACT = "black.txt";
     private static List<String> sBlackContact;
 
-    static {
-        String s = Environment.getExternalStorageDirectory() + "/linear";
-        File f = new File(s);
-        f.mkdirs();
-    }
+//    static {
+//        String s = Environment.getExternalStorageDirectory() + "/linear";
+//        File f = new File(s);
+//        f.mkdirs();
+//    }
+//
+//    public static void saveBlackContact(String contact) {
+//        if (sBlackContact == null){
+//            sBlackContact = new ArrayList<>();
+//        }
+//        sBlackContact.add(contact);
+//        saveToLocal(BLACK_CONTACT, sBlackContact);
+//    }
+//
+//    public static void removeBlackContact(String contact){
+//        sBlackContact.remove(contact);
+//        saveToLocal(BLACK_CONTACT, sBlackContact);
+//    }
 
-    public static void saveBlackContact(String contact) {
-        if (sBlackContact == null){
-            sBlackContact = new ArrayList<>();
-        }
-        sBlackContact.add(contact);
-        saveToLocal(BLACK_CONTACT, sBlackContact);
-    }
-
-    public static void removeBlackContact(String contact){
-        sBlackContact.remove(contact);
-        saveToLocal(BLACK_CONTACT, sBlackContact);
-    }
-
-    public static List<String> readBlackContact() {
-        if (sBlackContact == null) {
-            sBlackContact = readFromLocal(BLACK_CONTACT);
-        }
-        return sBlackContact;
-    }
+//    public static List<String> readBlackContact() {
+//        if (sBlackContact == null) {
+//            sBlackContact = readFromLocal(BLACK_CONTACT);
+//        }
+//        return sBlackContact;
+//    }
 
     private static void saveToLocal(String fileName, List<String> contact) {
         String path = Environment.getExternalStorageDirectory() + "/linear/" + fileName;

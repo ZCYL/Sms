@@ -20,14 +20,16 @@ import linear.sms.widget.SwitchPreference;
  * Created by ZCYL on 2018/4/14.
  */
 public class SettingActivity extends BaseActivity {
-
-
     @BindView(R.id.defaultSms)
     PreferenceView mDefaultSmsView;
     @BindView(R.id.spam_filter)
     SwitchPreference mBlockView;
     @BindView(R.id.app_info)
     PreferenceView mAppInfoView;
+    @BindView(R.id.spam_sync)
+    PreferenceView mSyncSpamSms;
+    @BindView(R.id.block_address_filter)
+    SwitchPreference mBlackBlock;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +41,12 @@ public class SettingActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mBlockView.setChecked(SettingsPre.isBlockEnable());
+        mBlackBlock.setChecked(SettingsPre.isBlackListEnable());
+        mBlockView.setOnCheckedChangeListener((buttonView, isChecked) -> SettingsPre.setBlockEnable(isChecked));
+        mBlackBlock.setOnCheckedChangeListener((buttonView, isChecked) -> SettingsPre.setBlackListEnable(isChecked));
+        mSyncSpamSms.setClickListener(v -> {
+
+        });
         mDefaultSmsView.setClickListener(v -> {
             String currentPn = getPackageName();//获取当前程序包名
             String defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(this);//获取手机当前设置的默认短信应用的包名
@@ -48,7 +56,6 @@ public class SettingActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        mBlockView.setOnCheckedChangeListener((buttonView, isChecked) -> SettingsPre.setBlockEnable(isChecked));
         mAppInfoView.setClickListener(v -> new AlertDialog.Builder(mContext)
                 .setTitle("帮助及反馈")
                 .setMessage("此App为李振初的本科毕业设计作品，有问题请直接联系本人")
@@ -66,4 +73,6 @@ public class SettingActivity extends BaseActivity {
         }
         return true;
     }
+
+
 }

@@ -9,7 +9,8 @@ import android.telephony.SmsMessage;
 import java.util.Objects;
 
 import linear.sms.bayes.PriorProbability;
-import linear.sms.util.FileUtil;
+import linear.sms.ui.base.MyApplication;
+import linear.sms.util.BlockedConversationHelper;
 import linear.sms.util.SettingsPre;
 
 /**
@@ -28,7 +29,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 String content = smsMessage.getMessageBody();
 
                 //先进行黑名单拦截
-                for (String s : FileUtil.readBlackContact()){
+                for (String s : BlockedConversationHelper.getBlackListAddress(MyApplication.instance.getSharedPreferences())){
                     if (s.equals(address)){
                         //在黑名单列表中，直接拦截
 

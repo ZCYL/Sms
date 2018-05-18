@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Set;
 
-import linear.sms.util.FileUtil;
+import linear.sms.ui.base.MyApplication;
+import linear.sms.util.BlockedConversationHelper;
 
 /**
  * Created by ZCYL on 2018/5/17.
@@ -20,7 +22,8 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.MyVi
     OnBlackLongClickListener mLongClickListener;
 
     public BlackListAdapter() {
-        mBlackContact = FileUtil.readBlackContact();
+        Set<String> set = BlockedConversationHelper.getBlackListAddress(MyApplication.instance.getSharedPreferences());
+        mBlackContact.addAll(set);
     }
 
     @NonNull
@@ -32,15 +35,13 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.mTextView.setText(mBlackContact.get(position));
-        holder.mTextView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mLongClickListener != null){
-                    mLongClickListener.onLongClick(position);
-                }
-                return false;
+        String address = mBlackContact.get(position);
+        holder.mTextView.setText(address);
+        holder.mTextView.setOnLongClickListener(v -> {
+            if (mLongClickListener != null){
+                mLongClickListener.onLongClick(position,address);
             }
+            return false;
         });
     }
 
@@ -51,7 +52,6 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.MyVi
 
     public void setOnLongClickListener(OnBlackLongClickListener listener){
         mLongClickListener = listener;
-
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
@@ -64,6 +64,6 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.MyVi
     }
 
     public interface OnBlackLongClickListener{
-        void onLongClick(int position);
+        void onLongClick(int position,String address);
     }
 }

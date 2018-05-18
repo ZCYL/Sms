@@ -46,6 +46,13 @@
                 app:title="@string/settings_default_sms_title"
                 app:summary="@string/settings_default_sms_summary"/>
 
+            <linear.sms.widget.PreferenceView
+                android:id="@+id/spam_sync"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/settings_spam_sms_sync_title"
+                app:summary="@string/settings_spam_sms_sync_summary"/>
+
             <TextView style="@style/divider"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp" />
@@ -53,6 +60,14 @@
             <linear.sms.widget.NormalTextView
                 style="@style/PreferenceCategory"
                 android:text="@string/settings_category_general" />
+
+            <linear.sms.widget.SwitchPreference
+                android:id="@+id/block_address_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_block_address_title"
+                app:title="@string/settings_block_address_summary"
+                />
 
             <linear.sms.widget.SwitchPreference
                 android:id="@+id/spam_filter"

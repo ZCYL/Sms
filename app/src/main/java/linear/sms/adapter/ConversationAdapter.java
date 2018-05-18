@@ -62,15 +62,14 @@ public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewH
             holder.snippetView.setMaxLines(5);
         } else {
             holder.unreadView.setVisibility(View.GONE);
-
             holder.snippetView.setMaxLines(1);
         }
 
         holder.mSelected.setVisibility(View.GONE);
         holder.dateView.setText(DateFormatter.getConversationTimestamp(mContext, conversation.getDate()));
         holder.mAvatarView.setVisibility(View.VISIBLE);
-        String emojiSnippet = conversation.getSnippet();
-        holder.snippetView.setText(emojiSnippet);
+        String snippet = conversation.getSnippet();
+        holder.snippetView.setText(snippet);
         holder.fromView.setText(conversation.getContactName());
     }
 

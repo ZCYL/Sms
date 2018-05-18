@@ -13,60 +13,53 @@ import java.util.Observable;
 import java.util.Set;
 
 import linear.sms.bean.Conversation;
+import linear.sms.ui.base.MyApplication;
 
 /**
  * A set of helper methods to group the logic related to blocked conversation
  */
 public class BlockedConversationHelper {
 
-    public static boolean isConversationBlocked(SharedPreferences prefs, long threadId) {
+    public static boolean isConversationBlocked(SharedPreferences prefs, String address) {
         Set<String> idStrings = prefs.getStringSet(SettingsPre.BLOCKED_SENDERS, new HashSet<String>());
-        return idStrings.contains(String.valueOf(threadId));
+        return idStrings.contains(address);
     }
 
-    public static void blockConversation(SharedPreferences prefs, long threadId) {
+    public static void blockConversation(SharedPreferences prefs, String address) {
         Set<String> idStrings = prefs.getStringSet(SettingsPre.BLOCKED_SENDERS, new HashSet<String>());
-        idStrings.add(String.valueOf(threadId));
+        idStrings.add(address);
         prefs.edit().putStringSet(SettingsPre.BLOCKED_SENDERS, idStrings).apply();
     }
 
-    public static void unblockConversation(SharedPreferences prefs, long threadId) {
+    public static void unblockConversation(SharedPreferences prefs,String address) {
         Set<String> idStrings = prefs.getStringSet(SettingsPre.BLOCKED_SENDERS, new HashSet<String>());
-        idStrings.remove(String.valueOf(threadId));
+        idStrings.remove(address);
         prefs.edit().putStringSet(SettingsPre.BLOCKED_SENDERS, idStrings).apply();
     }
 
-    public static Set<Long> getBlockedConversationIds(SharedPreferences prefs) {
-        Set<String> conversations = getBlockedConversations(prefs);
-        Set<Long> ids = new HashSet<>();
-        for (String id : conversations) {
-            ids.add(Long.parseLong(id));
-        }
-        return ids;
-    }
-
+    //获取Bayes短信拦截
     public static Set<String> getBlockedConversations(SharedPreferences prefs) {
         return prefs.getStringSet(SettingsPre.BLOCKED_SENDERS, new HashSet<String>());
     }
 
-    public static void blockFutureConversation(SharedPreferences prefs, String address) {
+    public static void blockBlackListAddress(SharedPreferences prefs, String address) {
         Set<String> idStrings = prefs.getStringSet(SettingsPre.BLOCKED_FUTURE, new HashSet<String>());
         idStrings.add(address);
         prefs.edit().putStringSet(SettingsPre.BLOCKED_FUTURE, idStrings).apply();
     }
 
-    public static void unblockFutureConversation(SharedPreferences prefs, String address) {
+    public static void unblockBlackListAddress(SharedPreferences prefs, String address) {
         Set<String> idStrings2 = prefs.getStringSet(SettingsPre.BLOCKED_FUTURE, new HashSet<String>());
         idStrings2.remove(address);
         prefs.edit().putStringSet(SettingsPre.BLOCKED_FUTURE, idStrings2).apply();
     }
 
-    public static Set<String> getFutureBlockedConversations(SharedPreferences prefs) {
+    public static Set<String> getBlackListAddress(SharedPreferences prefs) {
         return prefs.getStringSet(SettingsPre.BLOCKED_FUTURE, new HashSet<String>());
     }
 
     public static boolean isFutureBlocked(SharedPreferences prefs, String address) {
-//        for (String s : getFutureBlockedConversations(prefs)) {
+//        for (String s : getBlackListAddress(prefs)) {
 //            if (PhoneNumberUtils.compareLoosely(s, address)) {
 //                return true;
 //            }
@@ -80,19 +73,50 @@ public class BlockedConversationHelper {
         return idStrings.toArray(new String[idStrings.size()]);
     }
 
-    public static String getCursorSelection(SharedPreferences prefs, boolean blocked) {
+    public static String getCursorSelection(boolean needBlackList) {
         StringBuilder selection = new StringBuilder();
         selection.append(Telephony.Threads.MESSAGE_COUNT);
         selection.append(" != 0");
-        selection.append(" AND ");
-        selection.append(Telephony.Threads._ID);
-        if (!blocked) selection.append(" NOT");
-        selection.append(" IN (");
+        if (needBlackList) {
+            selection.append(" AND ");
+            selection.append(Telephony.Sms.ADDRESS);
+            selection.append(" NOT IN (");
+            Set<String> idStrings = getBlackListAddress(MyApplication.instance.getSharedPreferences());
+            for (int i = 0; i < idStrings.size(); i++) {
+                selection.append("?");
+                if (i < idStrings.size() - 1) {
+                    selection.append(",");
+                }
+            }
+            selection.append(")");
+        }
 
-        Set<String> idStrings = getBlockedConversations(prefs);
-        for (int i = 0; i < idStrings.size(); i++) {
+        return selection.toString();
+    }
+
+    public static String getSpamActivitySelection(boolean needBlackList,boolean needBlockSpam){
+        StringBuilder selection = new StringBuilder();
+        selection.append(Telephony.Threads.MESSAGE_COUNT);
+        selection.append(" != 0");
+        if (!needBlackList && !needBlockSpam){
+            return   selection.append(" = 0").toString();
+        }
+        selection.append(" != 0");
+        Set<String> addressString = new HashSet<>();
+
+        if (needBlackList){
+            addressString.addAll(getBlackListAddress(MyApplication.instance.getSharedPreferences()));
+        }
+        if (needBlockSpam){
+            addressString.addAll(getBlockedConversations(MyApplication.instance.getSharedPreferences()));
+        }
+
+        selection.append(" AND ");
+        selection.append(Telephony.Sms.ADDRESS);
+        selection.append(" IN (");
+        for (int i = 0; i < addressString.size(); i++) {
             selection.append("?");
-            if (i < idStrings.size() - 1) {
+            if (i < addressString.size() - 1) {
                 selection.append(",");
             }
         }
@@ -141,7 +165,7 @@ public class BlockedConversationHelper {
             // Create a cursor for the conversation list
             Cursor conversationCursor = mContext.getContentResolver().query(
                     SmsHelper.CONVERSATIONS_CONTENT_PROVIDER, Conversation.ALL_THREADS_PROJECTION,
-                    getCursorSelection(mPrefs, !mShowBlocked), getBlockedConversationArray(mPrefs), SmsHelper.sortDateDesc);
+                    getCursorSelection(!mShowBlocked), getBlockedConversationArray(mPrefs), SmsHelper.sortDateDesc);
 
 //            if (conversationCursor.moveToFirst()) {
 //                do {

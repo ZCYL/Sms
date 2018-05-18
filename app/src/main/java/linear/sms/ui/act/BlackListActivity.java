@@ -20,7 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import linear.sms.R;
 import linear.sms.adapter.BlackListAdapter;
 import linear.sms.ui.base.BaseActivity;
-import linear.sms.util.FileUtil;
+import linear.sms.util.BlockedConversationHelper;
 
 /**
  * Created by ZCYL on 2018/5/17.
@@ -43,14 +43,13 @@ public class BlackListActivity extends BaseActivity {
         mBlackListAdapter = new BlackListAdapter();
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mBlackListAdapter.setOnLongClickListener(position -> new AlertDialog.Builder(mContext)
+        mBlackListAdapter.setOnLongClickListener((position, address) -> new AlertDialog.Builder(mContext)
                 .setTitle("将该号码移出黑名单？")
                 .setMessage("移除之后，该号码的短信将不会被拦截")
                 .setPositiveButton("确定", (dialog, which) -> {
-                    FileUtil.removeBlackContact(FileUtil.readBlackContact().get(position));
-                    AndroidSchedulers.mainThread().scheduleDirect(() -> {
-                        mBlackListAdapter.notifyDataSetChanged();
-                    }, 200, TimeUnit.MILLISECONDS);
+                    BlockedConversationHelper.unblockBlackListAddress(mPrefs, address);
+                    AndroidSchedulers.mainThread().scheduleDirect(() -> mBlackListAdapter.notifyDataSetChanged(),
+                            200, TimeUnit.MILLISECONDS);
                     dialog.dismiss();
                 })
                 .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
@@ -87,7 +86,7 @@ public class BlackListActivity extends BaseActivity {
                 .setView(et)
                 .setPositiveButton("确定", (dialog, which) -> {
                     String num = et.getText().toString();
-                    FileUtil.saveBlackContact(num);
+                    BlockedConversationHelper.blockBlackListAddress(mPrefs, num);
                     AndroidSchedulers.mainThread().scheduleDirect(() -> {
                         mBlackListAdapter.notifyDataSetChanged();
                     }, 200, TimeUnit.MILLISECONDS);

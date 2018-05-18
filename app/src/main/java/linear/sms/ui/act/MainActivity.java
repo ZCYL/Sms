@@ -22,11 +22,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import linear.sms.R;
-import linear.sms.bean.Conversation;
 import linear.sms.adapter.ConversationAdapter;
 import linear.sms.adapter.RecyclerCursorAdapter;
+import linear.sms.bean.Conversation;
 import linear.sms.ui.base.BaseActivity;
 import linear.sms.util.BlockedConversationHelper;
+import linear.sms.util.SettingsPre;
 import linear.sms.util.SmsHelper;
 
 public class MainActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -57,8 +58,6 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     private void initList() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
         mAdapter = new ConversationAdapter(this);
         mAdapter.setItemClickListener(this);
         mAdapter.setMultiSelectListener(this);
@@ -79,7 +78,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @OnClick(R.id.fab)
     public void onWriteMessageClick(View view) {
-        MessageListActivity.launch(this,-1,-1,null,true);
+        MessageListActivity.launch(this, -1, -1, null, true);
     }
 
     @OnClick(R.id.settings)
@@ -94,7 +93,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     @OnClick(R.id.archived)
-    public void onSpamClick(View view){
+    public void onSpamClick(View view) {
         mDrawer.closeDrawer(GravityCompat.START);
         AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
             @Override
@@ -105,7 +104,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     @OnClick(R.id.black_list)
-    public void onBlackListClick(View view){
+    public void onBlackListClick(View view) {
         mDrawer.closeDrawer(GravityCompat.START);
         AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
             @Override
@@ -116,7 +115,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     @OnClick(R.id.inbox)
-    public void onInboxClick(){
+    public void onInboxClick() {
         mDrawer.closeDrawer(GravityCompat.START);
     }
 
@@ -148,7 +147,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(mContext, SmsHelper.CONVERSATIONS_CONTENT_PROVIDER, Conversation.ALL_THREADS_PROJECTION,
-                BlockedConversationHelper.getCursorSelection(mPrefs, false),
+                BlockedConversationHelper.getCursorSelection(SettingsPre.isBlackListEnable()),
                 BlockedConversationHelper.getBlockedConversationArray(mPrefs), "date DESC");
     }
 
