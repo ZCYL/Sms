@@ -6,14 +6,20 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import linear.sms.R;
 import linear.sms.adapter.ConversationAdapter;
 import linear.sms.adapter.RecyclerCursorAdapter;
@@ -72,7 +78,7 @@ public class SpamActivity extends BaseActivity implements LoaderManager.LoaderCa
         return new CursorLoader(mContext, SmsHelper.CONVERSATIONS_CONTENT_PROVIDER, Conversation.ALL_THREADS_PROJECTION,
                 BlockedConversationHelper.getSpamActivitySelection(SettingsPre.isBlackListEnable(),
                         SettingsPre.isBlockEnable()),
-                BlockedConversationHelper.getBlockedConversationArray(mPrefs), "date DESC");
+                null, "date DESC");
     }
 
     @Override
@@ -91,12 +97,12 @@ public class SpamActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public void onItemClick(Conversation object, View view) {
-
+        MessageListActivity.launch(this, object.getThreadId(), -1, null, true);
     }
 
     @Override
     public void onItemLongClick(Conversation object, View view) {
-
+        showRemoveDialog(object);
     }
 
     @Override
@@ -112,5 +118,23 @@ public class SpamActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onItemRemoved(long id) {
 
+    }
+
+    private void showRemoveDialog(Conversation conversation) {
+        final EditText et = new EditText(this);
+        et.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
+        new AlertDialog.Builder(this)
+                .setTitle("将该号码移出")
+                .setView(et)
+                .setPositiveButton("确定", (dialog, which) -> {
+                    BlockedConversationHelper.blockConversation(mPrefs, conversation.getContactNumper());
+                    AndroidSchedulers.mainThread().scheduleDirect(() -> {
+                        mAdapter.notifyDataSetChanged();
+                    }, 200, TimeUnit.MILLISECONDS);
+                    dialog.dismiss();
+                })
+                .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
     }
 }

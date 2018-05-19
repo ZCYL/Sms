@@ -2,6 +2,7 @@ package linear.sms.adapter;
 
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +18,9 @@ import linear.sms.util.DateFormatter;
 public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewHolder, Conversation> {
 
     private Conversation[] mConversationArray;
-    private boolean isHarm;
-    private static Conversation[] sSpamConversationArray;//用于存放垃圾短信
-    private int itemCount;
 
     public ConversationAdapter(BaseActivity context) {
-        this(context,false);
-    }
-
-    public ConversationAdapter(BaseActivity context, boolean isHarm) {
         super(context);
-        this.isHarm = isHarm;
-        sSpamConversationArray = new Conversation[0];
     }
 
     @NonNull
@@ -74,9 +66,7 @@ public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewH
     }
 
     protected Conversation getItem(int position) {
-        if (isHarm){
-            return sSpamConversationArray[position];
-        }
+
         Conversation conversation = null;
         if (mConversationArray != null) {
             conversation = mConversationArray[position];
@@ -86,21 +76,15 @@ public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewH
             conversation = Conversation.from(mContext, mCursor);
             mConversationArray[position] = conversation;
         }
+        if (position == 0){
+            Log.e("XXXXXXXX",conversation.toString());
+        }
         return conversation;
     }
 
     @Override
     protected void onCursorChange(Cursor cursor) {
-        mConversationArray = new Conversation[cursor.getCount()];
-        if (isHarm){
-            itemCount = sSpamConversationArray.length;
-        } else {
-            itemCount = cursor.getCount() - sSpamConversationArray.length;
-        }
+        mConversationArray = new Conversation[cursor == null ? 0:cursor.getCount()];
     }
 
-    @Override
-    public int getItemCount() {
-        return itemCount;
-    }
 }

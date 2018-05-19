@@ -8,7 +8,9 @@ import android.provider.Telephony;
 import android.util.Log;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Observable;
 import java.util.Set;
 
@@ -25,10 +27,16 @@ public class BlockedConversationHelper {
         return idStrings.contains(address);
     }
 
+    //bayes不通过
     public static void blockConversation(SharedPreferences prefs, String address) {
         Set<String> idStrings = prefs.getStringSet(SettingsPre.BLOCKED_SENDERS, new HashSet<String>());
         idStrings.add(address);
         prefs.edit().putStringSet(SettingsPre.BLOCKED_SENDERS, idStrings).apply();
+    }
+
+    public static void cleanBayesConversation(SharedPreferences preferences){
+        Set<String> idStrings = new HashSet<>();
+        preferences.edit().putStringSet(SettingsPre.BLOCKED_SENDERS, idStrings).apply();
     }
 
     public static void unblockConversation(SharedPreferences prefs,String address) {
@@ -79,17 +87,20 @@ public class BlockedConversationHelper {
         selection.append(" != 0");
         if (needBlackList) {
             selection.append(" AND ");
-            selection.append(Telephony.Sms.ADDRESS);
+            selection.append(Telephony.Threads._ID);
             selection.append(" NOT IN (");
             Set<String> idStrings = getBlackListAddress(MyApplication.instance.getSharedPreferences());
-            for (int i = 0; i < idStrings.size(); i++) {
-                selection.append("?");
-                if (i < idStrings.size() - 1) {
+            List<String> list = new ArrayList<>(idStrings);
+            for (int i = 0; i < list.size(); i++) {
+                selection.append(SmsHelper.getThreadId(MyApplication.instance,list.get(i)));
+                if (i < list.size() - 1) {
                     selection.append(",");
                 }
             }
             selection.append(")");
         }
+
+        Log.e("XXXXXX",selection.toString());
 
         return selection.toString();
     }
@@ -99,10 +110,10 @@ public class BlockedConversationHelper {
         selection.append(Telephony.Threads.MESSAGE_COUNT);
         selection.append(" != 0");
         if (!needBlackList && !needBlockSpam){
-            return   selection.append(" = 0").toString();
+            return   selection.append(" = -1").toString();
         }
         selection.append(" != 0");
-        Set<String> addressString = new HashSet<>();
+        List<String> addressString = new ArrayList<>();
 
         if (needBlackList){
             addressString.addAll(getBlackListAddress(MyApplication.instance.getSharedPreferences()));
@@ -112,10 +123,10 @@ public class BlockedConversationHelper {
         }
 
         selection.append(" AND ");
-        selection.append(Telephony.Sms.ADDRESS);
+        selection.append(Telephony.Threads._ID);
         selection.append(" IN (");
         for (int i = 0; i < addressString.size(); i++) {
-            selection.append("?");
+            selection.append(SmsHelper.getThreadId(MyApplication.instance,addressString.get(i)));
             if (i < addressString.size() - 1) {
                 selection.append(",");
             }

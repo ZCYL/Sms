@@ -21,7 +21,7 @@
   <string name="menu_delete">删除</string>
   <string name="menu_save">Save image</string>
   <string name="main_syncing">Optimizing database, this might take a minute&#8230;</string>
-  <string name="compose_hint">Write a message&#8230;</string>
+  <string name="compose_hint">输入短信&#8230;</string>
   <string name="message_status_sending">Sending&#8230;</string>
   <string name="message_status_delivered">Delivered %s</string>
   <string name="message_status_failed">发送失败。点击再试一次</string>

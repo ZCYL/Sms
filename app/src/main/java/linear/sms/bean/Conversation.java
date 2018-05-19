@@ -421,4 +421,25 @@ public class Conversation {
         }
     }
 
+    public String getContactNumper() {
+        return mContactNumper;
+    }
+
+    @Override
+    public String toString() {
+        return "Conversation{" +
+                "mThreadId=" + mThreadId +
+                ", mDate=" + mDate +
+                ", mMessageCount=" + mMessageCount +
+                ", mSnippet='" + mSnippet + '\'' +
+                ", mHasUnreadMessages=" + mHasUnreadMessages +
+                ", mHasAttachment=" + mHasAttachment +
+                ", mHasError=" + mHasError +
+                ", mIsChecked=" + mIsChecked +
+                ", mContactName='" + mContactName + '\'' +
+                ", mContactNumper='" + mContactNumper + '\'' +
+                ", mMarkAsReadBlocked=" + mMarkAsReadBlocked +
+                ", mMarkAsReadWaiting=" + mMarkAsReadWaiting +
+                '}';
+    }
 }

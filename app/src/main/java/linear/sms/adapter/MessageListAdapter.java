@@ -33,8 +33,6 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
     public static final int INCOMING_ITEM = 0;
     public static final int OUTGOING_ITEM = 1;
 
-    private ArrayList<Long> mSelectedConversations = new ArrayList<>();
-
     private static final Pattern urlPattern = Pattern.compile(
             "\\b(https?:\\/\\/\\S+(?:png|jpe?g|gif)\\S*)\\b",
             Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
@@ -45,9 +43,6 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
     private final Resources mRes;
     private final SharedPreferences mPrefs;
 
-    // Configuration options.
-    private long mThreadId = -1;
-    private long mRowId = -1;
     private Pattern mSearchHighlighter = null;
     private boolean mIsGroupConversation = false;
 

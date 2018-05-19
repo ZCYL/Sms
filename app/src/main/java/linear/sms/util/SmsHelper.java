@@ -226,24 +226,6 @@ public class SmsHelper {
         return count;
     }
 
-    public static long getThreadId(Context context, String address) {
-        Cursor cursor = null;
-        long threadId = 0;
-
-        try {
-            cursor = context.getContentResolver().query(SENT_MESSAGE_CONTENT_PROVIDER, new String[]{COLUMN_THREAD_ID}, COLUMN_ADDRESS + "=" + address, null, sortDateDesc);
-            cursor.moveToFirst();
-            threadId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_THREAD_ID));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return threadId;
-    }
 
     public static List<Message> getFailedMessages(Context context) {
         Cursor cursor = null;
@@ -482,5 +464,22 @@ public class SmsHelper {
             }
         }
         return address;
+    }
+
+    public static long getThreadId(Context context, String address) {
+        long threadId = 0;
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(SMS_CONTENT_PROVIDER, new String[]{SmsHelper.COLUMN_THREAD_ID}, COLUMN_ADDRESS + "=" + address, null, null);
+            cursor.moveToFirst();
+            threadId = cursor.getLong(cursor.getColumnIndexOrThrow(SmsHelper.COLUMN_THREAD_ID));
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            if (cursor != null){
+                cursor.close();
+            }
+        }
+        return threadId;
     }
 }

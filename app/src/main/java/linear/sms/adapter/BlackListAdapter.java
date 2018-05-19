@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.MyVi
 
     public BlackListAdapter() {
         Set<String> set = BlockedConversationHelper.getBlackListAddress(MyApplication.instance.getSharedPreferences());
-        mBlackContact.addAll(set);
+        mBlackContact = new ArrayList<>(set);
     }
 
     @NonNull
@@ -43,6 +44,12 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.MyVi
             }
             return false;
         });
+    }
+
+    public void onBlackDataChange(){
+        Set<String> set = BlockedConversationHelper.getBlackListAddress(MyApplication.instance.getSharedPreferences());
+        mBlackContact = new ArrayList<>(set);
+        notifyDataSetChanged();
     }
 
     @Override

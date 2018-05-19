@@ -48,7 +48,7 @@ public class BlackListActivity extends BaseActivity {
                 .setMessage("移除之后，该号码的短信将不会被拦截")
                 .setPositiveButton("确定", (dialog, which) -> {
                     BlockedConversationHelper.unblockBlackListAddress(mPrefs, address);
-                    AndroidSchedulers.mainThread().scheduleDirect(() -> mBlackListAdapter.notifyDataSetChanged(),
+                    AndroidSchedulers.mainThread().scheduleDirect(() -> mBlackListAdapter.onBlackDataChange(),
                             200, TimeUnit.MILLISECONDS);
                     dialog.dismiss();
                 })

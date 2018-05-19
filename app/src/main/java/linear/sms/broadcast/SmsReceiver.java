@@ -32,14 +32,13 @@ public class SmsReceiver extends BroadcastReceiver {
                 for (String s : BlockedConversationHelper.getBlackListAddress(MyApplication.instance.getSharedPreferences())){
                     if (s.equals(address)){
                         //在黑名单列表中，直接拦截
-
                         return;
                     }
                 }
 
                 if (address.length() <= 5){
                     //5位数以下的号码不拦截，可能是银行之类的号码
-
+                    showNotification(smsMessage);
                     return;
                 }
 
@@ -48,14 +47,18 @@ public class SmsReceiver extends BroadcastReceiver {
                 if (!SettingsPre.isBlockEnable()){
                     return;
                 }
-                PriorProbability.instance.isHarmMessage(content, new PriorProbability.OnBayesAnalyseFinishListener() {
-                    @Override
-                    public void onFinish(Boolean isHarmMessage) {
-
+                PriorProbability.instance.isHarmMessage(content, isHarmMessage -> {
+                    if (!isHarmMessage){
+                        showNotification(smsMessage);
                     }
                 });
                 abortBroadcast();
             }
         }
+    }
+
+
+    private void showNotification(SmsMessage smsMessage){
+
     }
 }
