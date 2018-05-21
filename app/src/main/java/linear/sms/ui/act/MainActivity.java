@@ -147,8 +147,8 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(mContext, SmsHelper.CONVERSATIONS_CONTENT_PROVIDER, Conversation.ALL_THREADS_PROJECTION,
-                BlockedConversationHelper.getCursorSelection(SettingsPre.isBlackListEnable()),
-                BlockedConversationHelper.getBlockedConversationArray(mPrefs), "date DESC");
+                BlockedConversationHelper.getCursorSelection(SettingsPre.isBlackListEnable(),SettingsPre.isBlockEnable()),
+                null, "date DESC");
     }
 
     @Override

@@ -1,8 +1,8 @@
 package linear.sms.ui.base;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import linear.sms.bayes.PriorProbability;
 
@@ -24,7 +24,7 @@ public class MyApplication extends Application {
 
     public SharedPreferences getSharedPreferences() {
         if (mPrefs == null) {
-            mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+            mPrefs =  getSharedPreferences(getPackageName()+"_pre", Context.MODE_MULTI_PROCESS);
         }
         return mPrefs;
     }

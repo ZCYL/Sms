@@ -66,7 +66,6 @@ public class ConversationAdapter extends RecyclerCursorAdapter<ConversationViewH
     }
 
     protected Conversation getItem(int position) {
-
         Conversation conversation = null;
         if (mConversationArray != null) {
             conversation = mConversationArray[position];

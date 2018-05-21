@@ -16,6 +16,7 @@ public class SettingsPre {
     public static final String BLOCKED_ENABLED = "pref_key_blocked_enabled";
     public static final String BLOCKED_BLACK_LIST_ENABLED = "pref_key_black_list_enabled";
     public static final String BLOCKED_SENDERS = "pref_key_blocked_senders";
+    public static final String BLOCKED_SPAM_ADDRESS = "pref_key_blocked_address";
     public static final String BLOCKED_FUTURE = "pref_key_block_future";
 
     public static final String TIMESTAMPS_24H = "pref_key_24h";

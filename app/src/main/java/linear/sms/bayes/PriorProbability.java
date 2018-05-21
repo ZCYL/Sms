@@ -89,6 +89,22 @@ public class PriorProbability {
                 });
     }
 
+    public boolean isHarmMessageSync(String content){
+        while (!isInitFinish) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        double hame = getProbality(content, trainHamList);
+        double normal = getProbality(content, trainNormalList);
+        double c_p = normal / (normal + hame);
+        normal = normal * c_p;
+        hame = hame * (1 - c_p);
+        return hame > normal;
+    }
+
     /**
      * 将所有训练数据拆分为单词 ,0为正常短信，1为垃圾短信 比如 “0	加拿大平面设计师JoeyCamacho3D雕塑作品”
      */

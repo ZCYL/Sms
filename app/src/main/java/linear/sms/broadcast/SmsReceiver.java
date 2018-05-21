@@ -50,6 +50,8 @@ public class SmsReceiver extends BroadcastReceiver {
                 PriorProbability.instance.isHarmMessage(content, isHarmMessage -> {
                     if (!isHarmMessage){
                         showNotification(smsMessage);
+                    } else {
+                        BlockedConversationHelper.blockConversation(MyApplication.instance.getSharedPreferences(),address);
                     }
                 });
                 abortBroadcast();

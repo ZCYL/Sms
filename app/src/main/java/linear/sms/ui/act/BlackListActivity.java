@@ -88,7 +88,7 @@ public class BlackListActivity extends BaseActivity {
                     String num = et.getText().toString();
                     BlockedConversationHelper.blockBlackListAddress(mPrefs, num);
                     AndroidSchedulers.mainThread().scheduleDirect(() -> {
-                        mBlackListAdapter.notifyDataSetChanged();
+                        mBlackListAdapter.onBlackDataChange();
                     }, 200, TimeUnit.MILLISECONDS);
                     dialog.dismiss();
                 })
