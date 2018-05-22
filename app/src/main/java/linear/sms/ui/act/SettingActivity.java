@@ -61,11 +61,7 @@ public class SettingActivity extends BaseActivity {
             Schedulers.io().scheduleDirect(() -> {
                 Cursor cursor = getContentResolver().query(SmsHelper.CONVERSATIONS_CONTENT_PROVIDER,
                         null, null, null, "date DESC");
-                int num = 0;
                 while (cursor.moveToNext()) {
-                    if (num > 10) {
-                        break;
-                    }
                     long threadId = cursor.getLong(0);
                     Cursor messageCursor = getContentResolver()
                             .query(Uri.withAppendedPath(Message.MMS_SMS_CONTENT_PROVIDER, String.valueOf(threadId)),
@@ -81,7 +77,6 @@ public class SettingActivity extends BaseActivity {
                         boolean isHarm = PriorProbability.instance.isHarmMessageSync(body);
                         if (isHarm) {
                             BlockedConversationHelper.blockConversation(mPrefs, address);
-                            num++;
                             break;
                         }
                     }
